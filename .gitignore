@@ -17,5 +17,6 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-docker/mysql
+docker/mysql/*
+!docker/mysql/README.md
 docker/nginx/logs
