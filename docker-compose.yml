@@ -1,0 +1,38 @@
+version: '3'
+services:
+  nginx-laravel:
+    container_name: "nginx-laravel"
+    build:
+      context: ./docker/nginx
+    depends_on:
+      - app-laravel
+    ports:
+      - 80:80
+    volumes:
+      - ./laravel:/src
+
+  app-laravel:
+    container_name: "app-laravel"
+    build:
+      context: ./docker/php
+    depends_on:
+      - mysql-laravel
+    ports:
+      - 5173:5173
+    volumes:
+      - ./laravel:/src
+      - /src/node_modules
+      - /src/vendor
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+
+  mysql-laravel:
+    image: mysql:8.0.33
+    command: --max_allowed_packet=32505856
+    container_name: "mysql-laravel"
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=laravel
+    ports:
+      - 3306:3306
